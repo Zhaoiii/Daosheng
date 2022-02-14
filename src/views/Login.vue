@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { reactive } from "@vue/reactivity";
 import { Button, Input as aInput } from "ant-design-vue";
+import { useEffect } from "zcomposition";
 import { version } from "../../package.json";
-import useUser from "../api/user";
+import { UserService, SoftService } from "../services/index";
 
-const { login } = useUser();
+const { auth } = UserService;
+const { softConfig } = SoftService;
+useEffect(() => {
+  softConfig();
+});
 const userInfo = reactive({
   code: "",
   password: "",
@@ -28,25 +33,26 @@ const userInfo = reactive({
         <h1 class="text-[20px]">登录</h1>
 
         <a-input
+          v-model:value="userInfo.code"
           placeholder="请输入账号"
           size="large"
           class="!mt-28px"
-          v-model:value="userInfo.code"
         />
         <a-input
+          v-model:value="userInfo.password"
           placeholder="请输入密码"
           size="large"
           type="password"
           class="!mt-28px"
-          v-model:value="userInfo.password"
         />
         <Button
           type="primary"
           class="mt-24px !h-40px"
           block
-          @click="login(userInfo)"
-          >登录</Button
+          @click="auth(userInfo)"
         >
+          登录
+        </Button>
         <div>
           <div class="copyright text-[14px] text-gray-500 mt-28px">
             © 2010 findsoft 海拉鲁王国依盖队海拉鲁大陆分社
